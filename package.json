@@ -2,9 +2,13 @@
   "name": "MLPR",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
-    "start": "nodemon ./src/main.js -w"
+    "dev": "nodemon ./src/main.js",
+    "start": "node ./src/main.js"
+  },
+  "engines": {
+    "node": "14.x"
   },
   "keywords": [],
   "author": "",
