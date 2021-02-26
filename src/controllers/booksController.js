@@ -3,6 +3,7 @@ const yup = require("yup");
 
 const indexSchema = yup.object().shape({
   tag: yup.string(),
+  search: yup.string(),
   page: yup.number().positive(),
   pageSize: yup.number().positive(),
 });
@@ -24,12 +25,28 @@ class BooksController {
       await indexSchema.validate(req.query);
 
       const tag = req.query.tag || "";
+      const search = req.query.search || "";
       const pageSize = Number(req.query.pageSize) || 10;
       const page = Number(req.query.page) || 1;
 
       const numberOfDocumentsToSkip = (page - 1) * pageSize;
 
-      const books = await Book.find({ tags: { $regex: new RegExp(tag, "i") } })
+      let query = undefined;
+
+      if (tag) {
+        query = { tags: { $regex: new RegExp(tag, "i") } };
+      } else if (search) {
+        query = {
+          $or: [
+            { title: new RegExp(search, "i") },
+            { author: new RegExp(search, "i") },
+            { description: new RegExp(search, "i") },
+            { tags: new RegExp(search, "i") },
+          ],
+        };
+      }
+
+      const books = await Book.find(query)
         .limit(pageSize)
         .skip(numberOfDocumentsToSkip)
         .select("-_id id title author description pages tags");
