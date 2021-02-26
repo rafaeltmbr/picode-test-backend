@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const routes = require("./routes");
 
@@ -12,6 +13,7 @@ class App {
 
   middlewares() {
     this.app.use(cors());
+    this.app.use(bodyParser.json());
   }
 
   routes() {
