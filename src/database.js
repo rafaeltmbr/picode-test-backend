@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const config = require("./config");
 
-mongoose.connect("mongodb://localhost/PiCode", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(config.database.uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console));
